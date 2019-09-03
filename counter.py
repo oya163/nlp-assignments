@@ -7,6 +7,9 @@
     Date - 09/02/2019
     Author - Oyesh Mann Singh
 
+    Assignment PDF:
+    https://www.csee.umbc.edu/courses/undergraduate/473/f19/content/materials/a1.pdf
+
     Basic Usage:
     python counter.py -q c -t <train_file> -d <development_file> -k 30 -a 10
 
