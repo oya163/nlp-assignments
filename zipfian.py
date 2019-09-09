@@ -57,7 +57,7 @@ def calculate_freq(filename):
     freq_dict = file_reader(filename)
     freq_list = get_freq(freq_dict)
 
-    return freq_list, np.arange(0,len(freq_list))
+    return freq_list, np.arange(len(freq_list),0,-1)
 
 
 def plot():
