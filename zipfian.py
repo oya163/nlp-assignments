@@ -16,7 +16,7 @@ import os
 import argparse
 import matplotlib
 import matplotlib.pyplot as plt
-matplotlib.use('agg')
+import numpy as np
 
 parser = argparse.ArgumentParser(description='Zipfian arguments')
 parser.add_argument('-t', '--train', required=True, metavar='FILE',
@@ -41,9 +41,8 @@ def file_reader(filename):
                     types[row[1]] = 1
 
     freq_dict = sorted(types.items(), key=lambda kv: kv[1], reverse=True)
-    rank_dict = sorted(types.items(), key=lambda kv: kv[1], reverse=False)
 
-    return (freq_dict, rank_dict)
+    return freq_dict
 
 
 def get_freq(dictionary):
@@ -55,22 +54,23 @@ def get_freq(dictionary):
 
 
 def calculate_freq(filename):
-    freq_dict, rank_dict = file_reader(filename)
+    freq_dict = file_reader(filename)
     freq_list = get_freq(freq_dict)
-    rank_list = get_freq(rank_dict)
 
-    return freq_list, rank_list
-    
+    return freq_list, np.arange(0,len(freq_list))
+
 
 def plot():
     freq, rank = calculate_freq(args.train)
+    plt.loglog(freq, rank)
+    plt.ylabel('log10freq')
+    plt.xlabel('log10rank')
+    plt.show()
     
 
 
 def main():
-    plt.plot([1, 2, 3, 4])
-    plt.ylabel('some numbers')
-    plt.show()
+    plot()
 
 if __name__ == "__main__":
     main()
