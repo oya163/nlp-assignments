@@ -10,6 +10,10 @@
     Date - 08/11/2019
 
     Question 4
+
+    How to run:
+    ./zipfian.py -t <data-path>
+
 '''
 
 import os
@@ -17,6 +21,11 @@ import argparse
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+from math import log
+
+from sklearn import linear_model
+from sklearn.metrics import mean_squared_error
+
 
 parser = argparse.ArgumentParser(description='Zipfian arguments')
 parser.add_argument('-t', '--train', required=True, metavar='FILE',
@@ -25,7 +34,7 @@ parser.add_argument('-t', '--train', required=True, metavar='FILE',
 
 args = parser.parse_args()
 
-# Return computed freq_dict
+# Returns computed freq_dict
 def file_reader(filename):
     types = {}
     tokens = 0
@@ -45,6 +54,7 @@ def file_reader(filename):
     return freq_dict
 
 
+# Returns frequency list
 def get_freq(dictionary):
     ret_list = []
     for each in dictionary:
@@ -53,24 +63,42 @@ def get_freq(dictionary):
     return ret_list
 
 
+# Returns frequency and rank of words
 def calculate_freq(filename):
     freq_dict = file_reader(filename)
     freq_list = get_freq(freq_dict)
 
-    return freq_list, np.arange(len(freq_list),0,-1)
+    return (freq_list, np.arange(1, len(freq_list)+1))
 
 
-def plot():
+# Computes linear regression
+def regression():
     freq, rank = calculate_freq(args.train)
-    plt.loglog(freq, rank)
+    y = np.asarray([log(z,10) for z in freq])
+    x = np.asarray([log(i,10) for i in rank])
+    x = x.reshape(-1, 1)           # Single feature used so reshaping
+
+    regr = linear_model.LinearRegression()
+    regr.fit(x, y)
+    y_pred = regr.predict(x)
+
+    return (x, y, y_pred)
+
+    
+# Plots the scatter plot and linear regression line
+def plot():
+    x, y, y_pred = regression()
+
+    plt.scatter(x, y, color='black', s=1)
+    plt.plot(x, y_pred, color='blue', linewidth=1)
     plt.ylabel('log10freq')
     plt.xlabel('log10rank')
     plt.show()
-    
 
 
 def main():
     plot()
+
 
 if __name__ == "__main__":
     main()
