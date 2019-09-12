@@ -24,7 +24,7 @@ import numpy as np
 from math import log
 
 from sklearn import linear_model
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, r2_score
 
 
 parser = argparse.ArgumentParser(description='Zipfian arguments')
@@ -82,18 +82,24 @@ def regression():
     regr.fit(x, y)
     y_pred = regr.predict(x)
 
-    return (x, y, y_pred)
+    mse = mean_squared_error(y, y_pred)
+    var = r2_score(y, y_pred)
+
+    return (x, y, y_pred, mse, var)
 
     
 # Plots the scatter plot and linear regression line
 def plot():
-    x, y, y_pred = regression()
+    x, y, y_pred, mse, var = regression()
+    print("Mean Squared Error: ", mse)
+    print("Variance score: ", var)
 
     plt.scatter(x, y, color='black', s=1)
     plt.plot(x, y_pred, color='blue', linewidth=1)
     plt.ylabel('log10freq')
     plt.xlabel('log10rank')
     plt.show()
+
 
 
 def main():
