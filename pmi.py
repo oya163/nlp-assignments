@@ -85,7 +85,7 @@ def calc_pmi(pair_prob, first_word_prob, second_word_prob):
     for word_pair, both_prob in pair_prob.items():
         first_prob = first_word_prob[word_pair[0]]
         second_prob = second_word_prob[word_pair[1]]
-        pmi[word_pair] = math.log(both_prob/(first_prob * second_prob))
+        pmi[word_pair] = math.log2(both_prob/(first_prob * second_prob))
 
     return pmi
     
@@ -113,13 +113,13 @@ def joint_freq():
     # Create bigrams from each sentence
     for sent in sents:
         text = sent.split()
-        if args.word:
-            if args.word in text:
-                for i in range(0, len(text)-1):
-                    final_sents.append((text[i], text[i+1]))
-        else:
-            for i in range(0, len(text)-1):
-                final_sents.append((text[i], text[i+1]))
+#        if args.word:
+#            if args.word in text:
+#                for i in range(0, len(text)-1):
+#                    final_sents.append((text[i], text[i+1]))
+#        else:
+        for i in range(0, len(text)-1):
+            final_sents.append((text[i], text[i+1]))
 
     # Count the bigrams
     counts = [(i, len(list(c))) for i,c in groupby(sorted(final_sents))]
@@ -128,7 +128,13 @@ def joint_freq():
     counts.sort(key = lambda x:x[1], reverse=True)
 
     # Get top 10 pairs
-    top_pairs = counts
+    top_pairs = []
+    if args.word:
+        for each in counts:
+            if args.word in each[0][0] or args.word in each[0][1]:
+                top_pairs.append(each)
+    else:
+        top_pairs = counts
 
     # Get probability of each pair
     top_pairs_prob = {}
@@ -174,7 +180,6 @@ def joint_freq():
     print("\nTop 10 list where PMI less than 3")
     pmi_gt_3 = interesting(pmi_sorted, gt=False)
     #printer(pmi_gt_3)
-
 
 def main():
     joint_freq()
