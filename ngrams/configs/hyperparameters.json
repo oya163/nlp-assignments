@@ -1,0 +1,12 @@
+{
+    "output_folder": "./output",
+    "data_folder": "./data",
+
+    "training_file": "train",
+    "dev_file": "dev",
+    "test_file": "test",
+
+    "model_name": "mle",
+    "n_gram": 1,
+    "lambda": 1
+}
