@@ -1,6 +1,6 @@
 {
     "output_folder": "./output",
-    "data_folder": "./data",
+    "data_folder": "../data",
 
     "training_file": "train",
     "dev_file": "dev",
