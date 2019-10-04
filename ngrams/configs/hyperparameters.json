@@ -1,12 +1,9 @@
 {
-    "output_folder": "./output",
-    "data_folder": "../data",
-
-    "training_file": "train",
-    "dev_file": "dev",
-    "test_file": "test",
-
     "model_name": "mle",
     "n_gram": 1,
-    "lambda": 1
+    "lambda_val": 10,
+    "unk_threshold": 1,
+    "unk_val": 1,
+    "discount": 0,
+    "norm_const": 2
 }
