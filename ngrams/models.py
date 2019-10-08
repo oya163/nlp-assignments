@@ -60,7 +60,12 @@ class MLE(DataModule):
         prob_list = []
         for k,v in self.d_items.items():
             self.d_prob[k] = self.t_prob.get(k, self.unk_val)
-            prob_list.append(self.d_prob[k])
+
+        for sent in self.d_sents:
+            prob = 1
+            for word in sent:
+                prob *= self.d_prob[word]
+            prob_list.append(prob)
         return np.exp(-np.mean(np.log(prob_list)))
                 
 
